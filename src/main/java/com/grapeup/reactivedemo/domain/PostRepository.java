@@ -1,4 +1,4 @@
-package com.grapeup.reactivedemo.post;
+package com.grapeup.reactivedemo.domain;
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 

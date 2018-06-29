@@ -1,4 +1,4 @@
-package com.grapeup.reactivedemo.post;
+package com.grapeup.reactivedemo.domain;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

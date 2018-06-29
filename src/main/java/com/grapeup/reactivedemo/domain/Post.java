@@ -1,4 +1,4 @@
-package com.grapeup.reactivedemo.post;
+package com.grapeup.reactivedemo.domain;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

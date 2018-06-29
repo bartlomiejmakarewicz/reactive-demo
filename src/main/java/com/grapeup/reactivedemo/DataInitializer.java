@@ -1,7 +1,7 @@
 package com.grapeup.reactivedemo;
 
-import com.grapeup.reactivedemo.post.Post;
-import com.grapeup.reactivedemo.post.PostRepository;
+import com.grapeup.reactivedemo.domain.Post;
+import com.grapeup.reactivedemo.domain.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
