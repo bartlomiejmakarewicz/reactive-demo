@@ -1,5 +1,6 @@
-package com.grapeup.reactivedemo;
+package com.grapeup.reactivedemo.post;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -9,9 +10,10 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
-public class RouterComponent {
+public class PostsRouterComponent {
 
   @Bean
+  @Autowired
   public RouterFunction<ServerResponse> routingFunction(PostHandler postHandler) {
     return route(GET("/posts"), postHandler::all)
             .andRoute(POST("/posts"), postHandler::create)

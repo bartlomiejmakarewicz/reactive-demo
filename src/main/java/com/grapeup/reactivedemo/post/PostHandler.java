@@ -1,5 +1,6 @@
-package com.grapeup.reactivedemo;
+package com.grapeup.reactivedemo.post;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -7,13 +8,15 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
-import static org.springframework.web.reactive.function.server.ServerResponse.*;
+import static org.springframework.web.reactive.function.server.ServerResponse.created;
+import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 @Component
 public class PostHandler {
 
   private final PostRepository postRepository;
 
+  @Autowired
   public PostHandler(PostRepository postRepository) {
     this.postRepository = postRepository;
   }
