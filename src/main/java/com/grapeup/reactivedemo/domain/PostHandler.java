@@ -1,53 +1,39 @@
 package com.grapeup.reactivedemo.domain;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
-
-import static org.springframework.web.reactive.function.server.ServerResponse.created;
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+import static org.springframework.web.reactive.function.server.ServerResponse.*;
 
 @Component
 public class PostHandler {
+  private final PostService postService;
 
-  private final PostRepository postRepository;
-
-  @Autowired
-  public PostHandler(PostRepository postRepository) {
-    this.postRepository = postRepository;
+  public PostHandler(PostService postService) {
+    this.postService = postService;
   }
 
   public Mono<ServerResponse> all(ServerRequest serverRequest) {
-    return ok().body(postRepository.findAll(), Post.class);
+    return ok().body(postService.all(), Post.class);
   }
 
   public Mono<ServerResponse> create(ServerRequest serverRequest) {
-    return serverRequest.bodyToMono(Post.class)
-            .flatMap(postRepository::save)
-            .flatMap(post -> created(URI.create("/posts/" + post.getId())).build());
+    return postService.create(serverRequest.bodyToMono(Post.class)).flatMap(post -> ok().body(Mono.just(post), Post.class)).switchIfEmpty(noContent().build());
   }
 
   public Mono<ServerResponse> get(ServerRequest serverRequest) {
-    return postRepository.findById(serverRequest.pathVariable("id"))
-            .flatMap(post -> ok().body(Mono.just(post), Post.class))
-            .switchIfEmpty(ServerResponse.notFound().build());
+    return ok().body(postService.get(serverRequest.pathVariable("id")), Post.class)
+            .switchIfEmpty(notFound().build());
   }
 
   public Mono<ServerResponse> update(ServerRequest serverRequest) {
-    return serverRequest.bodyToMono(Post.class).flatMap(post ->
-      postRepository.findById(post.getId()).flatMap(persistedPost -> {
-        persistedPost.setTitle(post.getTitle());
-        persistedPost.setContent(post.getContent());
-        return postRepository.save(persistedPost);
-      })
-    ).flatMap(post -> ServerResponse.noContent().build());
+    return ok().body(postService.update(serverRequest.pathVariable("id"), serverRequest.bodyToMono(Post.class)), Post.class)
+            .switchIfEmpty(noContent().build());
   }
 
   public Mono<ServerResponse> delete(ServerRequest serverRequest) {
-    return ServerResponse.noContent().build(postRepository.deleteById(serverRequest.pathVariable("id")));
+    return noContent().build(postService.delete(serverRequest.pathVariable("id")));
   }
 }
